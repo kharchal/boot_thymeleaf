@@ -3,8 +3,48 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            $("#search").keyup(function () {
+                $("#result").empty();
+                val = $("#search").val();
+                console.log("entered: " + val);
+                if (val.length >= 2) {
+                    $.get("/ajax/", {search: val}, function (data, status) {
+                        console.log("received: status=" + status + "\r\ndata= " + data);
+                        if (status == 'success') {
+                            var res = JSON.parse(data);
+                            console.log("parsed: " + res);
+                            table = "<table cellpadding='5'>";
+                            for (var i = 0; i < res.length; i++) {
+                                console.log("i=" + i + ": " + res[i].id + " " + res[i].name);
+                                table += "<tr><td>";
+                                table += res[i].id;
+                                table += "</td><td>";
+                                table += "<a href='/book/edit/" + res[i].id + "'>";
+                                table += res[i].name;
+                                table += "</a>";
+                                table += "</td></tr>";
+                            }
+                            table += "</table>";
+                            $("#result").html(table);
+
+                        }
+                    });
+                }
+            });
+        });
+        /*]]>*/
+    </script>
 </head>
 <body>
+
+    <h2>Live search:</h2>
+    <input id="search"/>
+    <div id="result"></div>
+    <hr/>
     <h2>List</h2>
     <table>
         <tr>

@@ -42,7 +42,7 @@ public class BookService {
     }
 
     public List<Book> find(String search) {
-        return bookMap.values().stream().filter(b -> b.getName().contains(search)).collect(toList());
+        return bookMap.values().stream().filter(b -> b.getName().toLowerCase().contains(search)).collect(toList());
     }
 
     public List<Book> findAll() {
