@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <h2>List</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"/>
+            <td><a th:href="@{/book/edit/} + ${book.id}" th:text="${book.name}"/></td>
+            <td><a th:href="@{/book/delete/} + ${book.id}">DELETE</a></td>
+        </tr>
+    </table>
+    <a th:href="@{/book/new}">Add new one</a>
+    <img th:src="@{img/leaf.gif}" border="10" />
+<img src="img/leaf.gif"/>
+</body>
+</html>

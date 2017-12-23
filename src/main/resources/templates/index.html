@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<h1>Welcome!</h1>
+template
+<a th:href="@{/start}">start</a><br/>
+<a th:href="@{/book/list}">start</a><br/>
+
+<form th:action="@{/form}" method="get">
+    Choose:
+    <select name="factor">
+        <option value="1" selected="selected">yes</option>
+        <option value="-1">no</option>
+    </select>
+    <input type="submit"/>
+</form>
+</body>
+</html>
