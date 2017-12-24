@@ -17,14 +17,19 @@
                         if (status == 'success') {
                             var res = JSON.parse(data);
                             console.log("parsed: " + res);
-                            table = "<table cellpadding='5'>";
+                            table = "<table border='1' cellspacing='0' cellpadding='3'>";
                             for (var i = 0; i < res.length; i++) {
                                 console.log("i=" + i + ": " + res[i].id + " " + res[i].name);
                                 table += "<tr><td>";
                                 table += res[i].id;
                                 table += "</td><td>";
                                 table += "<a href='/book/edit/" + res[i].id + "'>";
-                                table += res[i].name;
+                                var name = res[i].name;
+                                var ind = name.indexOf(val);
+
+                                table += name.substring(0, ind);
+                                table += "<span class='sel'>" + name.substr(ind, val.length);
+                                table += "</span>" + name.substring(ind + val.length, name.length);
                                 table += "</a>";
                                 table += "</td></tr>";
                             }
@@ -38,6 +43,11 @@
         });
         /*]]>*/
     </script>
+    <style>
+        .sel {
+            background-color: yellow;
+        }
+    </style>
 </head>
 <body>
 
