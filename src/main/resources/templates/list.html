@@ -7,40 +7,49 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         $(document).ready(function () {
+            $("#btn").click(function () {
+                search($("#search").val(), true);
+            });
             $("#search").keyup(function () {
-                $("#result").empty();
-                val = $("#search").val();
-                console.log("entered: " + val);
-                if (val.length >= 2) {
-                    $.get("/ajax/", {search: val}, function (data, status) {
-                        console.log("received: status=" + status + "\r\ndata= " + data);
-                        if (status == 'success') {
-                            var res = JSON.parse(data);
-                            console.log("parsed: " + res);
-                            table = "<table border='1' cellspacing='0' cellpadding='3'>";
-                            for (var i = 0; i < res.length; i++) {
-                                console.log("i=" + i + ": " + res[i].id + " " + res[i].name);
-                                table += "<tr><td>";
-                                table += res[i].id;
-                                table += "</td><td>";
-                                table += "<a href='/book/edit/" + res[i].id + "'>";
-                                var name = res[i].name;
-                                var ind = name.indexOf(val);
-
-                                table += name.substring(0, ind);
-                                table += "<span class='sel'>" + name.substr(ind, val.length);
-                                table += "</span>" + name.substring(ind + val.length, name.length);
-                                table += "</a>";
-                                table += "</td></tr>";
-                            }
-                            table += "</table>";
-                            $("#result").html(table);
-
-                        }
-                    });
-                }
+                search($("#search").val(), false);
             });
         });
+        function search(val, x) {
+            $("#result").empty();
+            console.log("entered: " + val);
+            if (x || val.length >= 2) {
+                $.get("/ajax/", {search: val}, function (data, status) {
+                    console.log("received: status=" + status + "\r\ndata= " + data);
+                    if (status == 'success') {
+                        var res = JSON.parse(data);
+                        console.log("parsed: " + res);
+                        table = "<table border='1' cellspacing='0' cellpadding='4'>";
+                        for (var i = 0; i < res.length; i++) {
+                            console.log("i=" + i + ": " + res[i].id + " " + res[i].name);
+                            table += "<tr><td>";
+                            table += res[i].id;
+                            table += "</td><td>";
+                            table += "<a href='/book/edit/" + res[i].id + "'>";
+                            var name = res[i].name;
+                            var ind = name.toLowerCase().indexOf(val);
+                            console.log(ind);
+                            var first = name.substring(0, ind);
+                            var selected = name.substr(ind, val.length);
+                            var last = name.substring(ind + val.length, name.length);
+                            console.log(first + ":" + selected + ":" + last);
+                            table += first;
+                            table += "<span class='sel'>" + selected;
+                            table += "</span>" + last;
+                            table += "</a>";
+                            table += "</td></tr>";
+                        }
+                        table += "</table>";
+                        $("#result").html(table);
+
+                    }
+                });
+            }
+        }
         /*]]>*/
     </script>
     <style>
@@ -53,6 +62,7 @@
 
     <h2>Live search:</h2>
     <input id="search"/>
+    <input type="button" id="btn" value="&#128269;"/>
     <div id="result"></div>
     <hr/>
     <h2>List</h2>
